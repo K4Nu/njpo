@@ -1,0 +1,29 @@
+pickle_write
+Time of pickle_writer is 0.0005493999999999985 seconds
+Time of pickle_writer is 0.0006695000000000034 seconds
+Time of pickle_writer is 0.004809499999999994 seconds
+
+pickle_reader
+Time of pickle_reader is 0.0003937999999999997 seconds
+Time of pickle_reader is 0.0009977999999999931 seconds
+Time of pickle_reader is 0.011253100000000002 seconds
+
+parquet_write
+Time of parquet_writer is 0.005807200000000012 seconds
+Time of parquet_writer is 0.007538700000000009 seconds
+Time of parquet_writer is 0.04591769999999995 seconds
+
+parquet_reader
+Time of parquet_reader is 0.008316699999999955 seconds
+Time of parquet_reader is 0.0020823999999999288 seconds
+Time of parquet_reader is 0.010945500000000052 seconds
+
+xlsx_writer
+Time of xlsx_writer is 0.026067300000000015 seconds
+Time of xlsx_writer is 0.46928860000000006 seconds
+Time of xlsx_writer is 4.9168246 seconds
+
+xlsx_reader
+Time of xlsx_reader is 0.013505600000000006 seconds
+Time of xlsx_reader is 0.41238930000000007 seconds
+Time of xlsx_reader is 4.1442827 seconds
