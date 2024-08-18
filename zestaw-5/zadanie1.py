@@ -3,20 +3,10 @@ from time import perf_counter
 import pandas as pd
 import fastparquet
 import openpyxl
-
+from decorator import timer_decor
 arr1={i:"test" for i in range(1,101)}
 arr2={i:"test" for i in range(1,10001)}
 arr3={i:"test" for i in range (1,100001)}
-
-def timer_decor(func):
-    def wrapper(*args, **kwargs):
-        start = perf_counter()  # Start the timer
-        result = func(*args, **kwargs)  # Execute the function
-        stop = perf_counter()  # Stop the timer
-        print(f'Time of {func.__name__} is {stop - start} seconds')
-        return result  # Return the result of the function
-    return wrapper
-
 
 @timer_decor
 def pickle_writer(data,num):
