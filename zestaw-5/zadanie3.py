@@ -69,28 +69,54 @@ def show_data():
     with Session(engine) as session:
         users=session.query(User).all()
         for row in users:
-            print(row.firstname)
+            print(f'{row.firstname} {row.lastname} {row.email}')
     return
 
+
 def update_row():
-    show_data()
+    show_data()  # Assuming this function displays users with row numbers starting from 1
+
     while True:
-        user_input=int(input("Which row do you want to update? Write number (starting from 1): "))
         try:
+            user_input = int(input("Which row do you want to update? Write number (starting from 1): "))
+
             with Session(engine) as session:
-                users = session.query(User).all()
-                if 1<=user_input<=len(users):
-                    user_input_2=input("Which row you want to update? Firstname, Lastname or Email?")
-                    if user_input_2.lower() in ("firstname", "lastname", "email"):
-                        user_row=user_input-1
-                        User.up
+                users = session.query(User).all()  # Get all users
+
+                if 1 <= user_input <= len(users):  # Check if the input is within the valid range
+                    user_to_update = users[user_input - 1]  # Get the user based on the 1-indexed input
+                    print(f'Current data: {user_to_update.firstname} {user_to_update.lastname} {user_to_update.email}')
+
+                    user_input_2 = input("Which field do you want to update? (firstname, lastname, email): ").lower()
+
+                    if user_input_2 in ("firstname", "lastname", "email"):
+                        user_input_3 = input(f"Write the new value for {user_input_2}: ")
+
+                        # Update the corresponding field dynamically
+                        setattr(user_to_update, user_input_2, user_input_3)
+
+                        session.commit()  # Commit the changes to the database
+                        print("The update has been successful.")
+                        break  # Exit the loop after a successful update
                     else:
-                        print("Invalid column name, try again")
-                        continue
+                        print("Invalid field name, please try again.")
+                else:
+                    print("Invalid row number.")
+
         except ValueError:
             print("Invalid input. Please enter a valid number.")
-            continue
         except Exception as e:
             print(f"An error occurred: {e}")
-            continue
-#comms={1:show_data,2:add_row,3:delete_row,4:update_row,5:quit}
+
+if __name__ == "__main__":
+    print("Welcome to the database")
+    comms = {1: show_data, 2: add_row, 3: delete_row, 4: update_row, 5: quit}
+
+    while True:
+        inp = int(input("Write what you want\n"
+                        "1 to show data\n"
+                        "2 to add new user\n"
+                        "3 to delete user\n"
+                        "4 to update user\n"
+                        "5 to exit\n"))
+        comms[inp]()
