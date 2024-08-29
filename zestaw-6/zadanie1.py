@@ -8,13 +8,14 @@ class Tree():
         self.children=[]
 
     def add_child(self,child):
-        self.parent=self
+        child.parent=self
         self.children.append(child)
 
-    def print_tree(self,level=0):
-        print(" "*level*2+self.data)
+    def __str__(self,level=0):
+        ret=" "*level*2+self.data+"\n"
         for child in self.children:
-            child.print_tree(level+1)
+            ret+=child.__str__(level+1)
+        return ret
 
     def __len__(self):
         if not self.children:
@@ -51,24 +52,65 @@ class Tree():
         while self.count() < target_count:
             new_name = "".join([chr(random.randint(ord("a"), ord("z"))) for _ in range(10)]).capitalize()
             new_child = Tree(data=new_name)
-            self.add_child(new_child)
+            parent=random.choice(list(self))
+            parent.add_child(new_child)
 
     def __call__(self, *args, **kwargs):
         return self.count()>0
 
-    def __iter__(self,level=0):
-        yield self,level
+    def __iter__(self):
+        yield self
 
         for child in self.children:
-            yield from child.__iter__(level+1)
+            yield from child
+
+    def __contains__(self, item):
+        q=[self]
+        while q:
+            current=q.pop(0)
+            if current.data==item:
+                return True
+            q.extend(current.children)
+        return False
+
+    def __getitem__(self, item):
+        q=[self]
+        index=0
+
+        while q:
+            current=q.pop(0)
+            if index==item:
+                return current.data
+            index+=1
+            q.extend(current.children)
+
+        raise IndexError("The index is invalid")
+
+    def __setitem__(self, data,parent_data):
+        new_item=Tree(data=data)
+        q=[self]
+        while q:
+            current=q.pop(0)
+            if current.data==parent_data:
+                new_item.parent=current
+                current.add_child(new_item)
+                return
+            q.extend(current.children)
+        raise ValueError(f"Parent {parent_data} not found")
+
+    def __lshift__(self, new_child):
+        if isinstance(new_child,Tree):
+            self.add_child(new_child)
+        else:
+            raise ValueError("The operand must be an instance of Tree.")
+        return self
+
 
 t=Tree("Esiok")
 t1=Tree("Zlom")
 t2=Tree("Janek")
 t.add_child(t1)
 t1.add_child(t2)
-t.print_tree()
-print(t.__pow__())
+#print(t.__pow__())
 #t.print_tree()
-for node, level in t:
-    print("\t" * level + node.data)
+print(t)
